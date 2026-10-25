@@ -1,0 +1,23 @@
+# Mapas offline (archivos de >100 MB, superan el límite de GitHub)
+mapas/
+
+# Volcados del equipo (pueden incluir dispositivos emparejados y datos del sistema)
+diagnostico/
+
+# Gradle / Android Studio
+.gradle/
+.kotlin/
+build/
+local.properties
+.idea/
+*.iml
+captures/
+.externalNativeBuild/
+.cxx/
+*.apk
+*.aab
+
+# Sistema
+.DS_Store
+Thumbs.db
+__pycache__/
