@@ -19,6 +19,12 @@ import com.eduard.crvlauncher.ui.HomeActions
 import com.eduard.crvlauncher.ui.HomeScreen
 import com.eduard.crvlauncher.ui.HomeState
 import com.eduard.crvlauncher.ui.LocalUnit
+import com.eduard.crvlauncher.ui.WifiStatus
+import com.eduard.crvlauncher.ui.RadioInfo
+import com.eduard.crvlauncher.ui.Notice
+import com.eduard.crvlauncher.ui.NoticePill
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.rounded.CloudOff
 import com.github.takahirom.roborazzi.captureRoboImage
 import org.junit.Test
 import org.junit.runner.RunWith
@@ -30,7 +36,7 @@ import org.robolectric.annotation.GraphicsMode
 @GraphicsMode(GraphicsMode.Mode.NATIVE)
 class HomeScreenshotTest {
 
-    private val noop = HomeActions({}, {}, {}, {}, {}, {}, {}, {}, {}, {}, {}, {})
+    private val noop = HomeActions()
 
     private fun fakeArt(): Bitmap {
         val bmp = Bitmap.createBitmap(300, 300, Bitmap.Config.ARGB_8888)
@@ -47,19 +53,20 @@ class HomeScreenshotTest {
         nowPlaying = NowPlaying(
             title = "I'm Sorry", artist = "Aventura", art = fakeArt(),
             durationMs = 252_000, positionMs = 85_000, positionAt = SystemClock.elapsedRealtime(),
-            playing = true, sourcePackage = "com.syu.bt",
+            playing = true, sourcePackage = "com.android.bluetooth",
         ),
+        sourceLabel = "Bluetooth Audio",
         bluetoothOn = true,
-        radioLabel = "96.1 MHz",
-        cityLabel = "San Pedro Sula",
+        wifi = WifiStatus(bars = 4, band = "5G"),
     )
 
-    private fun shot(name: String, state: HomeState) = captureRoboImage("../preview/$name.png") {
+    private fun shot(name: String, state: HomeState, notice: Notice? = null) = captureRoboImage("../preview/$name.png") {
         BoxWithConstraints(Modifier.fillMaxSize()) {
             val unit = minOf(maxWidth / DESIGN_W, maxHeight / DESIGN_H)
             CompositionLocalProvider(LocalUnit provides unit) {
                 AppBackground()
                 HomeScreen(state, noop)
+                NoticePill(notice)
             }
         }
     }
@@ -75,4 +82,20 @@ class HomeScreenshotTest {
     @Test
     @Config(qualifiers = "w1024dp-h600dp-land-mdpi", sdk = [34])
     fun home_empty_1024x600() = shot("home_empty_1024x600", HomeState())
+
+    @Test
+    @Config(qualifiers = "w1024dp-h600dp-land-mdpi", sdk = [34])
+    fun home_offline_notice_1024x600() =
+        shot("home_offline_notice_1024x600", sample, Notice("Sin conexión a internet", Icons.Rounded.CloudOff))
+
+    /** What the radio really shows for Bluetooth music: AVRCP on Android 8.1 sends no artwork. */
+    @Test
+    @Config(qualifiers = "w1024dp-h600dp-land-mdpi", sdk = [34])
+    fun home_bluetooth_no_art_1024x600() =
+        shot("home_bluetooth_no_art_1024x600", sample.copy(nowPlaying = sample.nowPlaying?.copy(art = null)))
+
+    @Test
+    @Config(qualifiers = "w1024dp-h600dp-land-mdpi", sdk = [34])
+    fun home_radio_1024x600() =
+        shot("home_radio_1024x600", sample.copy(radio = RadioInfo(freqKhz = 96_100, stationName = null, muted = false)))
 }

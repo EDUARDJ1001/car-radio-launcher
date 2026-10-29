@@ -10,33 +10,32 @@ import androidx.compose.ui.unit.TextUnit
 import androidx.compose.ui.unit.dp
 
 object Palette {
-    val Background = Color(0xFF050B1F)
-    val BackgroundGlow = Color(0xFF0F2A78)
-    val Rail = Color(0xFF070F27)
-    val RailSelected = Color(0xFF0C1C47)
-    val Accent = Color(0xFF3D8BFF)
+    val Background = Color(0xFF060D20)
+    val BackgroundGlow = Color(0xFF123A8C)
+    val Rail = Color(0xFF050B1B)
+    val Accent = Color(0xFF2F7BFF)
     val TextPrimary = Color(0xFFFFFFFF)
-    val TextSecondary = Color(0xFFA9BCE8)
+    val TextSecondary = Color(0xFF9FB3DA)
     val Divider = Color(0x332F4A8A)
 
-    val HeroTop = Color(0xFF123A9E)
-    val HeroBottom = Color(0xFF0A1F5E)
-    val HeroBorder = Color(0xFF2C57C2)
+    // Large cards (greeting, media): deep navy with a blue lift at the bottom.
+    val CardTop = Color(0xFF0B1836)
+    val CardBottom = Color(0xFF0D2252)
+    val CardBorder = Color(0xFF1E3A72)
 
-    val NavTop = Color(0xFF0C2160)
-    val NavBottom = Color(0xFF0A1A4C)
-    val NavBorder = Color(0xFF2F6BE6)
+    // Shortcut tiles.
+    val TileTop = Color(0xFF0E1830)
+    val TileBottom = Color(0xFF0A1226)
+    val TileBorder = Color(0xFF1C2948)
+    val TileActiveTop = Color(0xFF0F2A5E)
+    val TileActiveBottom = Color(0xFF0B1C44)
 
-    val MediaTop = Color(0xFF2B1F9A)
-    val MediaBottom = Color(0xFF3A2BC4)
-    val MediaBorder = Color(0xFF5B49E8)
-
-    val TileTop = Color(0xFF0E1A3C)
-    val TileBottom = Color(0xFF0A1430)
-    val TileBorder = Color(0xFF1F2E5C)
+    val ControlBg = Color(0xFF13203F)
+    val ControlBorder = Color(0xFF2A3E66)
+    val ProgressTrack = Color(0xFF2A3654)
 
     val PhoneGreen = Color(0xFF22C55E)
-    val CarPlayGreen = Color(0xFF2BD15A)
+    val Gear = Color(0xFFA3ACBF)
 }
 
 /**

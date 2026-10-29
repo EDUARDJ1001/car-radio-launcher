@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Debug-only probe for the Jancar service bridge; not part of release builds. -->
+<manifest xmlns:android="http://schemas.android.com/apk/res/android">
+    <application>
+        <receiver
+            android:name=".JancarProbeReceiver"
+            android:exported="true">
+            <intent-filter>
+                <action android:name="com.eduard.crvlauncher.PROBE" />
+            </intent-filter>
+        </receiver>
+    </application>
+</manifest>

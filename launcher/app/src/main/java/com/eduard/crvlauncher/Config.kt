@@ -7,6 +7,9 @@ package com.eduard.crvlauncher
 object Config {
     const val DRIVER_NAME = "Eduard"
 
+    /** How long "· Bienvenido" stays next to the greeting after the car starts. */
+    const val WELCOME_MINUTES = 3
+
     /**
      * Cities the weather can be pinned to (tap the weather to cycle).
      * "Automático" uses the unit's GPS and falls back to the first city.
@@ -19,20 +22,20 @@ object Config {
     )
 
     // Real packages read from the unit over ADB (Jancar firmware on AutoChips AC8227L, Android 8.1).
-    val NAVIGATION = listOf(
-        "net.osmand",
-        "net.osmand.plus",
-        "app.organicmaps",
-        "com.here.app.maps",
-        "com.google.android.apps.maps",
-    )
+    val NAVIGATION = listOf("com.google.android.apps.maps", "com.here.app.maps")
     val PHONE = listOf("com.jancar.bluetooth")
     val RADIO = listOf("com.jancar.radio")
+    /** Jancar's radio screen; the FM tile flashes it to start the tuner audio. */
+    val RADIO_ACTIVITY = "com.jancar.radio" to "com.jancar.radio.activity.RadioMainActivity"
     val MUSIC = listOf("com.spotify.music", "com.jancar.music")
     /** Wired Android Auto receiver first, then AutoAI's wireless link app. */
     val ANDROID_AUTO = listOf("com.google.android.projection.sink", "com.autoai.car.jlink")
     /** Media sessions that mean "music from the phone over Bluetooth". */
     val BLUETOOTH_MEDIA_SOURCES = setOf("com.android.bluetooth", "com.jancar.music", "com.jancar.bluetooth")
+    /** Jancar's dedicated Bluetooth-music screen (package, activity class). */
+    val BLUETOOTH_AUDIO_ACTIVITY = "com.jancar.music" to "com.jancar.music.activity.BTMusicActivity"
+    /** Jancar's own settings first; Android Settings is the fallback. */
+    val SETTINGS = listOf("com.jancar.settings")
     val CARPLAY = listOf("com.autochips.carplayapp", "com.autoai.car.jlink")
 }
 

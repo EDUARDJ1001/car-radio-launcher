@@ -1,20 +1,32 @@
 package com.eduard.crvlauncher.ui
 
+import androidx.compose.animation.AnimatedVisibility
+import androidx.compose.animation.core.tween
+import androidx.compose.animation.fadeIn
+import androidx.compose.animation.fadeOut
 import androidx.compose.foundation.Canvas
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
-import androidx.compose.foundation.clickable
+import androidx.compose.foundation.ExperimentalFoundationApi
+import androidx.compose.foundation.combinedClickable
 import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.interaction.collectIsPressedAsState
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.BoxScope
+import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material3.Icon
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.setValue
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -27,12 +39,14 @@ import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.Path
 import androidx.compose.ui.graphics.drawscope.Stroke
+import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.Dp
 
 /** Rounded "glass" card with a vertical gradient, thin border and press feedback. */
+@OptIn(ExperimentalFoundationApi::class)
 @Composable
 fun GlassCard(
     top: Color,
@@ -41,6 +55,7 @@ fun GlassCard(
     modifier: Modifier = Modifier,
     radius: Dp = 22.u,
     onClick: (() -> Unit)? = null,
+    onLongClick: (() -> Unit)? = null,
     content: @Composable BoxScope.() -> Unit,
 ) {
     val shape = RoundedCornerShape(radius)
@@ -53,7 +68,9 @@ fun GlassCard(
             .background(Brush.verticalGradient(listOf(top, bottom)))
             .border(1.5.u, border.copy(alpha = 0.75f), shape)
             .let { m ->
-                if (onClick != null) m.clickable(interaction, indication = null, onClick = onClick) else m
+                if (onClick != null) {
+                    m.combinedClickable(interaction, indication = null, onLongClick = onLongClick, onClick = onClick)
+                } else m
             },
         content = content,
     )
@@ -152,4 +169,34 @@ fun CircleOutline(size: Dp, color: Color, content: @Composable BoxScope.() -> Un
         contentAlignment = Alignment.Center,
         content = content,
     )
+}
+
+/** A short, low-key message ("Sin conexión a internet") shown at the bottom of the screen. */
+data class Notice(val text: String, val icon: ImageVector, val id: Long = System.nanoTime())
+
+@Composable
+fun BoxScope.NoticePill(notice: Notice?) {
+    // Keep the last text while fading out, so it doesn't blank mid-animation.
+    var shown by remember { mutableStateOf(notice) }
+    if (notice != null) shown = notice
+    AnimatedVisibility(
+        notice != null,
+        enter = fadeIn(tween(200)),
+        exit = fadeOut(tween(600)),
+        modifier = Modifier.align(Alignment.BottomCenter).padding(bottom = 22.u),
+    ) {
+        val n = shown ?: return@AnimatedVisibility
+        Row(
+            Modifier
+                .clip(RoundedCornerShape(30.u))
+                .background(Color(0xE6101C38))
+                .border(1.u, Color(0x552F5BB0), RoundedCornerShape(30.u))
+                .padding(horizontal = 28.u, vertical = 14.u),
+            verticalAlignment = Alignment.CenterVertically,
+        ) {
+            Icon(n.icon, null, tint = Palette.TextSecondary, modifier = Modifier.size(30.u))
+            Spacer(Modifier.width(14.u))
+            Label(n.text, 24, color = Color(0xFFD5DEF5))
+        }
+    }
 }

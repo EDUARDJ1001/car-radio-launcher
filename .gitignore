@@ -1,6 +1,3 @@
-# Mapas offline (archivos de >100 MB, superan el límite de GitHub)
-mapas/
-
 # Volcados del equipo (pueden incluir dispositivos emparejados y datos del sistema)
 diagnostico/
 
